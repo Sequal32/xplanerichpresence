@@ -85,7 +85,7 @@ void GetVatsimId() {
 	ifstream file;
 	file.open("vatsimid.txt");
 	if (file.is_open())
-		std::getline(file, vatsimId);
+		getline(file, vatsimId);
 	else
 		vatsimId = "";
 	file.close();
@@ -106,7 +106,7 @@ float LoopCallback(float elaspedLastCall, float elaspedLastLoop, int counter, vo
 	boolean onGround = (aglVal <= 100 && gndVal <= 25) ? true : false;
 
 	//Finding Flight Plan
-	if (totaltime % 30 == 0 and usingSquawkbox and vatsimId) {
+	if (totaltime % 30 == 0 and usingSquawkbox and vatsimId != "") {
 		if (GetVatsimData(vatsimId)) {
 			if (dest != c_dest) {
 				float *p_dest_lat = &dest_lat;
@@ -131,13 +131,13 @@ float LoopCallback(float elaspedLastCall, float elaspedLastLoop, int counter, vo
 
 	//Updating Discord Presence
 
-	char dstate[64];
+	char dstate[128];
 	char details[256];
 	char flight_state[32];
 
 	int timestamp;
 
-	printf(dstate, "%d ft %d kts", (int)altVal, (int)gndVal);
+	sprintf(dstate, "%d ft %d kts", (int)altVal, (int)gndVal);
 
 	if (distance != NULL) {
 		sprintf(details, "%s - %s", dep, dest);
@@ -189,8 +189,8 @@ PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void * inP
 	XPLMDebugString("RPC: Recieved message: " + inMsg);
 	switch (inMsg) {
 		case XSB_MSG_CONNECTED:
-			XPLMGetDatab(pilot_id, vatsimId, 0, sizeof(pilot_id));
-			XPLMDebugString("RPC: Connection to VATSIM detected Pilot ID: " + *vatsimId);
+			//XPLMGetDatab(pilot_id, vatsimId, 0, sizeof(pilot_id));
+			//XPLMDebugString("RPC: Connection to VATSIM detected Pilot ID: " + *vatsimId);
 			usingSquawkbox = true;
 			break;
 		case XSB_MSG_DISCONNECTED:

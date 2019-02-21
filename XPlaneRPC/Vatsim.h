@@ -16,7 +16,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	return size * nmemb;
 }
 
-static bool GetVatsimData(std::string* vatsimId) {
+static bool GetVatsimData(std::string vatsimId) {
 	CURL *easyhandle = curl_easy_init();
 	std::string readBuffer;
 
